@@ -5,7 +5,7 @@ Capacity of all cycles for various batteries
 import requests
 import pandas as pd
 import numpy as np
-import plotly.graph_objects as go # Moved import to the top
+import plotly.graph_objects as go
 
 UPPER_LIMIT = 3.44
 LOWER_LIMIT = 3.28
@@ -89,7 +89,7 @@ else:
 
 
 def create_c2_c1_vs_cycles_graph(data):
-    """Create c2-c1 vs cycles graph for all batteries"""
+    
     
     # If no data was passed, return an empty dictionary to prevent errors
     if len(data) == 0:
@@ -114,7 +114,7 @@ def create_c2_c1_vs_cycles_graph(data):
     for battery_name in batteries_in_data:
         battery_df = df[df['battery_name'] == battery_name].copy()
         
-        # detect charging sessions (gap > 5 minutes = new session)
+        # charging sessions (gap > 5 minutes = new session)
         battery_df['time_diff'] = battery_df['timeStamp'].diff().dt.total_seconds() / 60
         battery_df['session_id'] = (battery_df['time_diff'] > 5).cumsum()
         
@@ -122,7 +122,7 @@ def create_c2_c1_vs_cycles_graph(data):
         total_cycles = battery_df['session_id'].nunique()
         print(f"\n{battery_name}: Total cycles detected: {total_cycles}")
         
-        # Process each session to find c1 and c2 points
+        # Process each session
         cycle_data = []
         
         for session_id, session_df in battery_df.groupby('session_id'):
